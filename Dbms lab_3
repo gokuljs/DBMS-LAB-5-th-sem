@@ -1,0 +1,265 @@
+create table actor(act_id varchar(10) primary key,act_name varchar(25),act_gender varchar(7));
+
+create table director(dir_id varchar(10) primary key,dir_name varchar(25),dir_phone bigint);
+
+create table movies(mov_id varchar(10) primary key,mov_title varchar(20),mov_year int,mov_lang varchar(15),dir_id varchar(10),foreign key(dir_id) references director(dir_id) on delete cascade);
+
+create table movie_cast(act_id varchar(10),mov_id varchar(10),role varchar(20),foreign key(act_id) references actor(act_id), foreign key(mov_id) references movies(mov_id) on delete cascade);
+
+create table rating(mov_id varchar(10),review varchar(20),stars int,foreign key(mov_id) references movies(mov_id) on delete cascade);
+
+MariaDB [1CR17IS019]> insert into actor values("A001","Dilip","Male");
+Query OK, 1 row affected (0.03 sec)
+
+MariaDB [1CR17IS019]> insert into actor values("A002","Ayesha","Female");
+Query OK, 1 row affected (0.04 sec)
+
+MariaDB [1CR17IS019]> insert into actor values("A004","Deeksha","Female");
+Query OK, 1 row affected (0.04 sec)
+
+MariaDB [1CR17IS019]> insert into actor values("A005","Disha","Female");
+Query OK, 1 row affected (0.04 sec)
+
+MariaDB [1CR17IS019]> insert into actor values("A003","Haripranav","Male");
+Query OK, 1 row affected (0.03 sec)
+
+MariaDB [1CR17IS019]> insert into actor values("A006","Haricharan","Male");
+Query OK, 1 row affected (0.03 sec)
+
+MariaDB [1CR17IS019]> select * from actor;
++--------+------------+------------+
+| act_id | act_name   | act_gender |
++--------+------------+------------+
+| A001   | Dilip      | Male       |
+| A002   | Ayesha     | Female     |
+| A003   | Haripranav | Male       |
+| A004   | Deeksha    | Female     |
+| A005   | Disha      | Female     |
+| A006   | Haricharan | Male       |
++--------+------------+------------+
+6 rows in set (0.00 sec)
+
+MariaDB [1CR17IS019]> insert into director values("D001","Habiba",8343218700);
+Query OK, 1 row affected (0.04 sec)
+
+MariaDB [1CR17IS019]> insert into director values("D002","Guruprasad",9347838017);
+Query OK, 1 row affected (0.02 sec)
+
+MariaDB [1CR17IS019]> insert into director values("D003","Eajaz Ahmed",8010124681);
+Query OK, 1 row affected (0.04 sec)
+
+MariaDB [1CR17IS019]> insert into director values("D004","Arun",9917778030);
+Query OK, 1 row affected (0.04 sec)
+
+MariaDB [1CR17IS019]> insert into director values("D005","Kumar",8317248310);
+Query OK, 1 row affected (0.04 sec)
+
+MariaDB [1CR17IS019]> insert into director values("D006","Likith",7829771815);
+Query OK, 1 row affected (0.04 sec)
+
+MariaDB [1CR17IS019]> select * from director;
++--------+-------------+------------+
+| dir_id | dir_name    | dir_phone  |
++--------+-------------+------------+
+| D001   | Habiba      | 8343218700 |
+| D002   | Guruprasad  | 9347838017 |
+| D003   | Eajaz Ahmed | 8010124681 |
+| D004   | Arun        | 9917778030 |
+| D005   | Kumar       | 8317248310 |
+| D006   | Likith      | 7829771815 |
++--------+-------------+------------+
+6 rows in set (0.01 sec)
+
+
+MariaDB [1CR17IS019]> insert into movies values("A001","Avengers Endgame",2019,"English","D006");
+Query OK, 1 row affected (0.03 sec)
+
+MariaDB [1CR17IS019]> insert into movies values("M002","Super 30",2019,"Hindi","D003");
+Query OK, 1 row affected (0.03 sec)
+
+MariaDB [1CR17IS019]> insert into movies values("M003","URI The surgical strike",2019,"Hindi","D001");
+Query OK, 1 row affected, 1 warning (0.04 sec)
+
+MariaDB [1CR17IS019]> insert into movies values("M004","Gang-Leader",2019,"Telugu","D002");
+Query OK, 1 row affected (0.03 sec)
+
+MariaDB [1CR17IS019]> insert into movies values("M005","Chichore",2019,"Hindi","D003");
+Query OK, 1 row affected (0.04 sec)
+
+MariaDB [1CR17IS019]> insert into movies values("M006","Fast and furious 9",2019,"English","D006");
+Query OK, 1 row affected (0.06 sec)
+
+MariaDB [1CR17IS019]> update movies set mov_id="M001" where mov_name="Avengers Endgame";
+ERROR 1054 (42S22): Unknown column 'mov_name' in 'where clause'
+MariaDB [1CR17IS019]> update movies set mov_id="M001" where mov_title="Avengers Endgame";
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [1CR17IS019]> select * from movies;
++--------+----------------------+----------+----------+--------+
+| mov_id | mov_title            | mov_year | mov_lang | dir_id |
++--------+----------------------+----------+----------+--------+
+| M001   | Avengers Endgame     |     2019 | English  | D006   |
+| M002   | Super 30             |     2019 | Hindi    | D003   |
+| M003   | URI The surgical str |     2019 | Hindi    | D001   |
+| M004   | Gang-Leader          |     2019 | Telugu   | D002   |
+| M005   | Chichore             |     2019 | Hindi    | D003   |
+| M006   | Fast and furious 9   |     2019 | English  | D006   |
++--------+----------------------+----------+----------+--------+
+6 rows in set (0.00 sec)
+
+
+MariaDB [1CR17IS019]> insert into movie_cast values("A001","M006","Villian");
+Query OK, 1 row affected (0.03 sec)
+
+MariaDB [1CR17IS019]> insert into movie_cast values("A002","M003","Comedian");
+Query OK, 1 row affected (0.04 sec)
+
+MariaDB [1CR17IS019]> insert into movie_cast values("A002","M004","Heroine");
+Query OK, 1 row affected (0.03 sec)
+
+MariaDB [1CR17IS019]> insert into movie_cast values("A002","M006","Comedian");
+Query OK, 1 row affected (0.03 sec)
+
+MariaDB [1CR17IS019]> insert into movie_cast values("A005","M002","Heroine");
+Query OK, 1 row affected (0.03 sec)
+
+MariaDB [1CR17IS019]> insert into movie_cast values("A003","M001","Hero");
+Query OK, 1 row affected (0.03 sec)
+
+MariaDB [1CR17IS019]> insert into movie_cast values("A006","M001","Villian");
+Query OK, 1 row affected (0.04 sec)
+
+MariaDB [1CR17IS019]> select * from movie_cast;
++--------+--------+----------+
+| act_id | mov_id | role     |
++--------+--------+----------+
+| A001   | M006   | Villian  |
+| A002   | M003   | Comedian |
+| A002   | M004   | Heroine  |
+| A002   | M006   | Comedian |
+| A005   | M002   | Heroine  |
+| A003   | M001   | Hero     |
+| A006   | M001   | Villian  |
++--------+--------+----------+
+7 rows in set (0.01 sec)
+
+
+MariaDB [1CR17IS019]> insert into rating values("M003","Excellent",5);
+Query OK, 1 row affected (0.03 sec)
+
+MariaDB [1CR17IS019]> insert into rating values("M004","Excellent",5);
+Query OK, 1 row affected (0.05 sec)
+
+MariaDB [1CR17IS019]> insert into rating values("M001","Good Direction",5);
+Query OK, 1 row affected (0.14 sec)
+
+MariaDB [1CR17IS019]> insert into rating values("M005","Good",4);
+Query OK, 1 row affected (0.05 sec)
+
+MariaDB [1CR17IS019]> insert into rating values("M003","Excellent",5);
+Query OK, 1 row affected (0.04 sec)
+
+MariaDB [1CR17IS019]> insert into rating values("M006","Average",3);
+Query OK, 1 row affected (0.04 sec)
+
+MariaDB [1CR17IS019]> select * from rating;
++--------+----------------+-------+
+| mov_id | review         | stars |
++--------+----------------+-------+
+| M003   | Excellent      |     5 |
+| M004   | Excellent      |     5 |
+| M001   | Good Direction |     5 |
+| M005   | Good           |     4 |
+| M003   | Excellent      |     5 |
+| M006   | Average        |     3 |
++--------+----------------+-------+
+6 rows in set (0.00 sec)
+
+
+1) list the titles of all movies directed by likith
+	
+MariaDB [1CR17IS019]> select mov_title from movies m,director d where m.dir_id=d.dir_id and d.dir_name="Likith";
++--------------------+
+| mov_title          |
++--------------------+
+| Avengers Endgame   |
+| Fast and furious 9 |
++--------------------+
+2 rows in set (0.01 sec)
+
+					(OR)
+
+MariaDB [1CR17IS019]> select mov_title from movies where dir_id in(select dir_id from director where dir_name="Likith");
++--------------------+
+| mov_title          |
++--------------------+
+| Avengers Endgame   |
+| Fast and furious 9 |
++--------------------+
+2 rows in set (0.00 sec)
+
+					(OR)
+
+MariaDB [1CR17IS019]> select mov_title from movies m where exists(select * from director d where m.dir_id=d.dir_id and dir_name="Likith");
++--------------------+
+| mov_title          |
++--------------------+
+| Avengers Endgame   |
+| Fast and furious 9 |
++--------------------+
+2 rows in set (0.00 sec)
+
+					(OR)
+
+MariaDB [1CR17IS019]> select mov_title from movies m join director d on m.dir_id=d.dir_id where dir_name="Likith";
++--------------------+
+| mov_title          |
++--------------------+
+| Avengers Endgame   |
+| Fast and furious 9 |
++--------------------+
+2 rows in set (0.00 sec)
+
+2) find the movies name where one or more actors acted in two or more movies
+
+MariaDB [1CR17IS019]> select mov_title from movies where mov_id in(select mov_id from movie_cast where act_id in(select act_id from movie_cast group by(act_id) having count(*)>1));
++----------------------+
+| mov_title            |
++----------------------+
+| URI The surgical str |
+| Gang-Leader          |
+| Fast and furious 9   |
++----------------------+
+3 rows in set (0.00 sec)
+
+					(OR)
+
+MariaDB [1CR17IS019]> select mov_title from movies m,movie_cast mc where m.mov_id=mc.mov_id and act_id in(select act_id from movie_cast group by(act_id) having count(*)>1);
++----------------------+
+| mov_title            |
++----------------------+
+| URI The surgical str |
+| Gang-Leader          |
+| Fast and furious 9   |
++----------------------+
+3 rows in set (0.00 sec)
+
+
+3) List all actors who acted in the movies before 2000 and acted in the movie after 2015 using join
+
+MariaDB [1CR17IS019]> select act_name,mov_title,mov_year from actor a join movie_cast mc on a.act_id=mc.act_id join movies m on mc.mov_id=m.mov_id where m.mov_year not between 2000 and 2015;
++------------+----------------------+----------+
+| act_name   | mov_title            | mov_year |
++------------+----------------------+----------+
+| Dilip      | Fast and furious 9   |     2019 |
+| Ayesha     | URI The surgical str |     2019 |
+| Ayesha     | Gang-Leader          |     2019 |
+| Ayesha     | Fast and furious 9   |     2019 |
+| Disha      | Super 30             |     2019 |
+| Haripranav | Avengers Endgame     |     2019 |
+| Haricharan | Avengers Endgame     |     2019 |
++------------+----------------------+----------+
+
+
+

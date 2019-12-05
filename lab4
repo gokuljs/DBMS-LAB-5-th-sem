@@ -1,0 +1,165 @@
+->create table students(usn varchar(10) primary key,sname varchar(25),address varchar(30),phone bigint,gender varchar(5));
+Query OK, 0 rows affected (0.28 sec)
+
+-> create table semsec(ssid varchar(10) primary key,sem varchar(5),sec varchar(5));
+Query OK, 0 rows affected (0.25 sec)
+
+> create table class(usn varchar(10),ssid varchar(10),primary key(usn,ssid),foreign key(usn) references students(usn),foreign key(ssid) references semsec(ssid) on delete cascade);
+Query OK, 0 rows affected (0.30 sec)
+
+> create table subject(subcode varchar(10) primary key,title varchar(15),sem varchar(5),credits varchar(10));
+Query OK, 0 rows affected (0.24 sec)
+
+> create table ia_marks(usn varchar(10),subcode varchar(10),ssid varchar(10),test1 int,test2 int,test3 int,final_ia int,primary key(usn,subcode,ssid),foreign key(usn) references students(usn),foreign key(subcode) references subject(subcode),foreign key(ssid) references semsec(ssid) on delete cascade);
+Query OK, 0 rows affected (0.34 sec)
+
+MariaDB [1CR17IS019]> insert into students values("1CR17IS023","Dilip.K","Bangalore",8321489812,"Male");
+Query OK, 1 row affected (0.05 sec)
+
+MariaDB [1CR17IS019]> insert into students values("1CR17IS024","Disha.K","Bangalore",7598270330,"Female");
+Query OK, 1 row affected, 1 warning (0.04 sec)
+
+MariaDB [1CR17IS019]> insert into students values("1CR17IS015","Ashwath.J","Chennai",9916663080,"Male");
+Query OK, 1 row affected (0.04 sec)
+
+MariaDB [1CR17IS019]> insert into students values("1CR17IS050","Likith.P","Mangalore",9606220840,"Male");
+Query OK, 1 row affected (0.03 sec)
+
+MariaDB [1CR17IS019]> insert into students values("1CR17IS033","Hari","Honnavar",7289771618,"Male");
+Query OK, 1 row affected (0.04 sec)
+
+MariaDB [1CR17IS019]> insert into students values("1CR17IS026","Eajaz","Mumbai",9164020787,"Male");
+Query OK, 1 row affected (0.04 sec)
+
+MariaDB [1CR17IS019]> insert into semsec values("3A","3","A");
+Query OK, 1 row affected (0.04 sec)
+
+MariaDB [1CR17IS019]> insert into semsec values("3B","3","B");
+Query OK, 1 row affected (0.04 sec)
+
+MariaDB [1CR17IS019]> insert into semsec values("3C","3","C");
+Query OK, 1 row affected (0.04 sec)
+
+MariaDB [1CR17IS019]> insert into semsec values("4A","4","A");
+Query OK, 1 row affected (0.10 sec)
+
+MariaDB [1CR17IS019]> insert into semsec values("4B","4","B");
+Query OK, 1 row affected (0.04 sec)
+
+MariaDB [1CR17IS019]> insert into semsec values("4C","4","C");
+Query OK, 1 row affected (0.04 sec)
+
+MariaDB [1CR17IS019]> insert into semsec values("5A","5","A");
+Query OK, 1 row affected (0.03 sec)
+
+MariaDB [1CR17IS019]> insert into semsec values("5B","5","B");
+Query OK, 1 row affected (0.05 sec)
+
+MariaDB [1CR17IS019]> insert into semsec values("5C","5","C");
+Query OK, 1 row affected (0.03 sec)
+
+MariaDB [1CR17IS019]> insert into class values("1CR17IS024","5A");
+Query OK, 1 row affected (0.03 sec)
+
+MariaDB [1CR17IS019]> insert into class values("1CR17IS023","3C");
+Query OK, 1 row affected (0.04 sec)
+
+MariaDB [1CR17IS019]> insert into class values("1CR17IS015","5C");
+Query OK, 1 row affected (0.04 sec)
+
+MariaDB [1CR17IS019]> insert into class values("1CR17IS050","3B");
+Query OK, 1 row affected (0.04 sec)
+
+MariaDB [1CR17IS019]> insert into class values("1CR17IS033","5A");
+Query OK, 1 row affected (0.04 sec)
+
+MariaDB [1CR17IS019]> insert into class values("1CR17IS026","4A");
+Query OK, 1 row affected (0.04 sec)
+
+MariaDB [1CR17IS019]> insert into subject values("S001","Java",3,5);
+Query OK, 1 row affected (0.07 sec)
+
+MariaDB [1CR17IS019]> insert into subject values("S002","CAD",5,7);
+Query OK, 1 row affected (0.04 sec)
+
+MariaDB [1CR17IS019]> insert into subject values("S003","C#",4,8);
+Query OK, 1 row affected (0.04 sec)
+
+MariaDB [1CR17IS019]> insert into subject values("S004","DBMS",3,9);
+Query OK, 1 row affected (0.04 sec)
+
+MariaDB [1CR17IS019]> insert into subject values("S005","CN",5,8);
+Query OK, 1 row affected (0.05 sec)
+
+MariaDB [1CR17IS019]> insert into subject values("S006","M3",3,8);
+Query OK, 1 row affected (0.04 sec)
+
+
+MariaDB [1CR17IS019]> create trigger finalmarks before insert on ia_marks for each row set new.final_ia=((new.test1+new.test2+new.test3)-least(new.test1,new.test2,new.test3))/2;
+Query OK, 0 rows affected (0.07 sec)
+
+MariaDB [1CR17IS019]> insert into ia_marks(usn,subcode,ssid,test1,test2,test3) values("1CR17IS024","S001","5A",70,75,72);
+Query OK, 1 row affected (0.12 sec)
+
+MariaDB [1CR17IS019]> insert into ia_marks(usn,subcode,ssid,test1,test2,test3) values("1CR17IS023","S001","3C",80,79,75);
+Query OK, 1 row affected (0.06 sec)
+
+MariaDB [1CR17IS019]> insert into ia_marks(usn,subcode,ssid,test1,test2,test3) values("1CR17IS015","S003","5C",77,75,70);
+Query OK, 1 row affected (0.08 sec)
+
+MariaDB [1CR17IS019]> insert into ia_marks(usn,subcode,ssid,test1,test2,test3) values("1CR17IS050","S005","3B",53,80,80);
+Query OK, 1 row affected (0.04 sec)
+
+MariaDB [1CR17IS019]> insert into ia_marks(usn,subcode,ssid,test1,test2,test3) values("1CR17IS033","S006","5A",69,73,74);
+Query OK, 1 row affected (0.04 sec)
+
+MariaDB [1CR17IS019]> insert into ia_marks(usn,subcode,ssid,test1,test2,test3) values("1CR17IS026","S004","4A",80,53,56);
+Query OK, 1 row affected (0.04 sec)
+
+MariaDB [1CR17IS019]> select * from ia_marks;
++------------+---------+------+-------+-------+-------+----------+
+| usn        | subcode | ssid | test1 | test2 | test3 | final_ia |
++------------+---------+------+-------+-------+-------+----------+
+| 1CR17IS015 | S003    | 5C   |    77 |    75 |    70 |       76 |
+| 1CR17IS023 | S001    | 3C   |    80 |    79 |    75 |       80 |
+| 1CR17IS024 | S001    | 5A   |    70 |    75 |    72 |       74 |
+| 1CR17IS026 | S004    | 4A   |    80 |    53 |    56 |       68 |
+| 1CR17IS033 | S006    | 5A   |    69 |    73 |    74 |       74 |
+| 1CR17IS050 | S005    | 3B   |    53 |    80 |    80 |       80 |
++------------+---------+------+-------+-------+-------+----------+
+6 rows in set (0.00 sec)
+
+-------------------------------------------------------QUERIES------------------------------------------------------------------------
+
+(1)  MariaDB [1CR17IS019]> select s.subcode,title from subject s,ia_marks ia where ia.test1>ia.test2 and ia.subcode=s.subcode;
++---------+-------+
+| subcode | title |
++---------+-------+
+| S003    | C#    |
+| S001    | Java  |
+| S004    | DBMS  |
++---------+-------+
+3 rows in set (0.00 sec)
+
+(2) MariaDB [1CR17IS019]> select s.usn,s.sname,s.address,s.phone,s.gender from students s,semsec sm,class c where s.usn=c.usn and sm.ssid=c.ssid and sem="3" and sec="C";
++------------+---------+-----------+------------+--------+
+| usn        | sname   | address   | phone      | gender |
++------------+---------+-----------+------------+--------+
+| 1CR17IS023 | Dilip.K | Bangalore | 8321489812 | Male   |
++------------+---------+-----------+------------+--------+
+1 row in set (0.00 sec)
+
+
+(4)
+
+MariaDB [1CR17IS019]> create view test1_marks_ as select usn,s.subcode,title,sem,test1 from subject s,ia_marks ia where s.subcode=ia.subcode and usn="1CR17IS024";
+Query OK, 0 rows affected (0.03 sec)
+
+MariaDB [1CR17IS019]> select * from test1_marks_;
++------------+---------+-------+------+-------+
+| usn        | subcode | title | sem  | test1 |
++------------+---------+-------+------+-------+
+| 1CR17IS024 | S001    | Java  | 3    |    70 |
++------------+---------+-------+------+-------+
+1 row in set (0.01 sec)
+

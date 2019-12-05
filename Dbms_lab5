@@ -1,0 +1,184 @@
+MariaDB [1CR17IS019]> insert into employee values("E001","Deeksha","Mangalore","Female",100000,NULL,NULL);
+Query OK, 1 row affected (0.08 sec)
+
+MariaDB [1CR17IS019]> insert into employee values("E002","Haricharan","Bangalore","Male",80000,NULL,NULL);
+Query OK, 1 row affected (0.04 sec)
+
+MariaDB [1CR17IS019]> insert into employee values("E003","Dilip","Bangalore","Male",75000,NULL,"E001");
+Query OK, 1 row affected (0.03 sec)
+
+MariaDB [1CR17IS019]> insert into employee values("E004","Ashwath","Chennai","Male",80000,NULL,"E002");
+Query OK, 1 row affected (0.04 sec)
+
+MariaDB [1CR17IS019]> insert into employee values("E005","Disha","Pinaji","Female",55000,NULL,"E003");
+Query OK, 1 row affected (0.04 sec)
+
+MariaDB [1CR17IS019]> insert into employee values("E006","Likith","Bangalore","Male",58000,NULL,"E003");
+Query OK, 1 row affected (0.06 sec)
+
+MariaDB [1CR17IS019]> insert into employee values("E007","Habiba","Bangalore","Female",70000,NULL,"E003");
+Query OK, 1 row affected (0.03 sec)
+
+MariaDB [1CR17IS019]> insert into employee values("E008","Eajaz","Chittor","Female",58000,NULL,"E004");
+Query OK, 1 row affected (0.04 sec)
+
+MariaDB [1CR17IS019]> insert into employee values("E009","Hruday","Hyderabad","Male",55000,NULL,"E004");
+Query OK, 1 row affected (0.04 sec)
+
+MariaDB [1CR17IS019]> insert into employee values("E010","Rakesh","Delhi","Male",50000,NULL,"E004");
+Query OK, 1 row affected (0.03 sec)
+
+MariaDB [1CR17IS019]> select * from employee;
++------+------------+-----------+--------+--------+------+---------+
+| ssn  | ename      | address   | sex    | salary | dno  | sup_ssn |
++------+------------+-----------+--------+--------+------+---------+
+| E001 | Deeksha    | Mangalore | Female | 100000 | NULL | NULL    |
+| E002 | Haricharan | Bangalore | Male   |  80000 | NULL | NULL    |
+| E003 | Dilip      | Bangalore | Male   |  75000 | NULL | E001    |
+| E004 | Ashwath    | Chennai   | Male   |  80000 | NULL | E002    |
+| E005 | Disha      | Pinaji    | Female |  55000 | NULL | E003    |
+| E006 | Likith     | Bangalore | Male   |  58000 | NULL | E003    |
+| E007 | Habiba     | Bangalore | Female |  70000 | NULL | E003    |
+| E008 | Eajaz      | Chittor   | Female |  58000 | NULL | E004    |
+| E009 | Hruday     | Hyderabad | Male   |  55000 | NULL | E004    |
+| E010 | Rakesh     | Delhi     | Male   |  50000 | NULL | E004    |
++------+------------+-----------+--------+--------+------+---------+
+10 rows in set (0.00 sec)
+
+
+MariaDB [1CR17IS019]> insert into department values("D001","Silk","E001","2015-11-10");
+
+MariaDB [1CR17IS019]> insert into department values("D002","Cotton","E002","2016-05-18");
+
+MariaDB [1CR17IS019]> select * from department;
++------+--------+---------+----------------+
+| dno  | dname  | mgr_ssn | mgr_start_date |
++------+--------+---------+----------------+
+| D001 | Silk   | E001    | 2015-11-10     |
+| D002 | Cotton | E002    | 2016-05-18     |
++------+--------+---------+----------------+
+2 rows in set (0.00 sec)
+
+MariaDB [1CR17IS019]> update employee set dno="D001" where ssn="E001";
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [1CR17IS019]> update employee set dno="D001" where ssn="E003";
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [1CR17IS019]> update employee set dno="D001" where ssn="E005";
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [1CR17IS019]> update employee set dno="D001" where ssn="E006";
+Query OK, 1 row affected (0.03 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [1CR17IS019]> update employee set dno="D002" where ssn="E002";
+Query OK, 1 row affected (0.03 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [1CR17IS019]> update employee set dno="D002" where ssn="E004";
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [1CR17IS019]> update employee set dno="D002" where ssn="E007";
+Query OK, 1 row affected (0.03 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [1CR17IS019]> update employee set dno="D002" where ssn="E008";
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [1CR17IS019]> update employee set dno="D002" where ssn="E009";
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [1CR17IS019]> update employee set dno="D002" where ssn="E010";
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [1CR17IS019]> select * from employee;
++------+------------+-----------+--------+--------+------+---------+
+| ssn  | ename      | address   | sex    | salary | dno  | sup_ssn |
++------+------------+-----------+--------+--------+------+---------+
+| E001 | Deeksha    | Mangalore | Female | 100000 | D001 | NULL    |
+| E002 | Haricharan | Bangalore | Male   |  80000 | D002 | NULL    |
+| E003 | Dilip      | Bangalore | Male   |  75000 | D001 | E001    |
+| E004 | Ashwath    | Chennai   | Male   |  80000 | D002 | E002    |
+| E005 | Disha      | Pinaji    | Female |  55000 | D001 | E003    |
+| E006 | Likith     | Bangalore | Male   |  58000 | D001 | E003    |
+| E007 | Habiba     | Bangalore | Female |  70000 | D002 | E003    |
+| E008 | Eajaz      | Chittor   | Female |  58000 | D002 | E004    |
+| E009 | Hruday     | Hyderabad | Male   |  55000 | D002 | E004    |
+| E010 | Rakesh     | Delhi     | Male   |  50000 | D002 | E004    |
++------+------------+-----------+--------+--------+------+---------+
+10 rows in set (0.00 sec)
+
+MariaDB [1CR17IS019]> insert into dlocation values("D001","Bangalore");
+Query OK, 1 row affected (0.07 sec)
+
+MariaDB [1CR17IS019]> insert into dlocation values("D002","Chennai");
+Query OK, 1 row affected (0.03 sec)
+
+MariaDB [1CR17IS019]> select * from dlocation;
++------+-----------+
+| dno  | dloc      |
++------+-----------+
+| D001 | Bangalore |
+| D002 | Chennai   |
++------+-----------+
+2 rows in set (0.00 sec)
+
+MariaDB [1CR17IS019]> insert into project values("P001","Disha fabrics","Bangalore","D001");
+Query OK, 1 row affected (0.05 sec)
+
+MariaDB [1CR17IS019]> insert into project values("P002","Dilip T-shirts","Bangalore","D002");
+Query OK, 1 row affected (0.04 sec)
+
+MariaDB [1CR17IS019]> insert into project values("P003","Brinda silkwares","Hyderabad","D002");
+Query OK, 1 row affected (0.04 sec)
+
+MariaDB [1CR17IS019]> select * from project;
++------+------------------+-----------+------+
+| pno  | pname            | plocatin  | dno  |
++------+------------------+-----------+------+
+| P001 | Disha fabrics    | Bangalore | D001 |
+| P002 | Dilip T-shirts   | Bangalore | D002 |
+| P003 | Brinda silkwares | Hyderabad | D002 |
++------+------------------+-----------+------+
+3 rows in set (0.01 sec)
+
+MariaDB [1CR17IS019]> insert into works_on values("E004","P001",5);
+Query OK, 1 row affected (0.07 sec)
+
+MariaDB [1CR17IS019]> insert into works_on values("E005","P003",3);
+Query OK, 1 row affected (0.05 sec)
+
+MariaDB [1CR17IS019]> insert into works_on values("E001","P002",16);
+Query OK, 1 row affected (0.03 sec)
+
+MariaDB [1CR17IS019]> insert into works_on values("E006","P001",8);
+Query OK, 1 row affected (0.03 sec)
+
+MariaDB [1CR17IS019]> insert into works_on values("E007","P003",8);
+Query OK, 1 row affected (0.04 sec)
+
+MariaDB [1CR17IS019]> insert into works_on values("E005","P002",10);
+Query OK, 1 row affected (0.03 sec)
+
+MariaDB [1CR17IS019]> select * from works_on;
++------+------+-------+
+| ssn  | pno  | hours |
++------+------+-------+
+| E001 | P002 |    16 |
+| E004 | P001 |     5 |
+| E005 | P002 |    10 |
+| E005 | P003 |     3 |
+| E006 | P001 |     8 |
+| E007 | P003 |     8 |
++------+------+-------+
+6 rows in set (0.00 sec)
+
+

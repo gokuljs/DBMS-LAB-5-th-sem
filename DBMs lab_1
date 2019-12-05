@@ -1,0 +1,145 @@
+select b.book_id,title,publisher_name,author_name,no_of_copies,branch_name from book b,book_author ba,library_branch lb,book_copies bc where b.book_id=ba.book_id and b.book_id=bc.book_id and lb.branch_id=bc.branch_id;
+
++---------+---------------+-----------------+------------------+--------------+-------------+
+| book_id | title         | publisher_name  | author_name      | no_of_copies | branch_name |
++---------+---------------+-----------------+------------------+--------------+-------------+
+| B001    | JAVA          | Hari publisher  | Dilip.K          |           32 | Government  |
+| B001    | JAVA          | Hari publisher  | Dilip.K          |           10 | CMR univer  |
+| B002    | PYTHON        | CMR publisher   | Suman.R          |           11 | ACS colleg  |
+| B003    | C#            | CMR publisher   | Haricharan Hegde |           41 | MVJ colleg  |
+| B003    | C#            | CMR publisher   | Ashwath.J        |           41 | MVJ colleg  |
+| B005    | R Programming | Suman publisher | Brinda           |           10 | CMR techni  |
+| B002    | PYTHON        | CMR publisher   | Disha.K          |           11 | ACS colleg  |
+| B006    | JAVASCRIPT    | dilip publisher | Disha.K          |            9 | Don Bosco   |
+| B005    | R Programming | Suman publisher | Disha.K          |           10 | CMR techni  |
++---------+---------------+-----------------+------------------+--------------+-------------+
+
+
+ insert into book_lending values("B002","P006","CR002","2019-01-25","2019-01-29");
+Query OK, 1 row affected (0.09 sec)
+
+MariaDB [1CR17IS019]> insert into book_lending values("B005","P004","CR002","2019-01-25","2019-01-30");
+Query OK, 1 row affected (0.03 sec)
+
+MariaDB [1CR17IS019]> select * from book_lending;
++---------+-----------+---------+------------+------------+
+| book_id | branch_id | card_no | date_out   | due_date   |
++---------+-----------+---------+------------+------------+
+| B005    | P003      | CR002   | 2019-08-18 | 2019-08-18 |
+| B004    | P001      | CR009   | 2019-08-23 | 2019-08-01 |
+| B001    | P003      | CR001   | 2019-08-19 | 2019-08-29 |
+| B001    | P004      | CR003   | 2019-08-19 | 2019-08-29 |
+| B003    | P001      | CR003   | 2019-08-21 | 2019-08-31 |
+| B002    | P002      | CR002   | 2019-08-22 | 2019-08-01 |
+| B004    | P004      | CR002   | 2019-08-23 | 2019-08-01 |
+| B005    | P003      | CR002   | 2019-01-15 | 2019-01-20 |
+| B002    | P006      | CR002   | 2019-01-25 | 2019-01-29 |
+| B005    | P004      | CR002   | 2019-01-25 | 2019-01-30 |
++---------+-----------+---------+------------+------------+
+10 rows in set (0.00 sec)
+
+MariaDB [1CR17IS019]> select card_no,count(*) from book_lending group by card_no;
++---------+----------+
+| card_no | count(*) |
++---------+----------+
+| CR001   |        1 |
+| CR002   |        6 |
+| CR003   |        2 |
+| CR009   |        1 |
++---------+----------+
+4 rows in set (0.00 sec)
+
+
+MariaDB [1CR17IS019]> select card_no,count(*) from book_lending where date_out between '2019-01-15' and '2019-08-30' group by(card_no) having count(*)>3;
++---------+----------+
+| card_no | count(*) |
++---------+----------+
+| CR002   |        6 |
++---------+----------+
+1 row in set (0.00 sec)
+
+
+MariaDB [1CR17IS019]> create view bookcount as select b.book_id,title,no_of_copies from book b,book_copies bc where b.book_id=bc.book_id;
+Query OK, 0 rows affected (0.03 sec)
+MariaDB [1CR17IS019]> select * from bookcount;
++---------+---------------+--------------+
+| book_id | title         | no_of_copies |
++---------+---------------+--------------+
+| B005    | R Programming |           10 |
+| B001    | JAVA          |           32 |
+| B003    | C#            |           41 |
+| B001    | JAVA          |           10 |
+| B006    | JAVASCRIPT    |            9 |
+| B002    | PYTHON        |           11 |
++---------+---------------+--------------+
+6 rows in set (0.01 sec)
+
+
+MariaDB [1CR17IS019]> delete from book where book_id="B003";
+Query OK, 1 row affected (0.14 sec)
+
+MariaDB [1CR17IS019]> select * from book;
++---------+---------------+----------+-----------------+
+| book_id | title         | pub_year | publisher_name  |
++---------+---------------+----------+-----------------+
+| B001    | JAVA          |     2018 | Hari publisher  |
+| B002    | PYTHON        |     2018 | CMR publisher   |
+| B004    | All in one C  |     2019 | Dilip publisher |
+| B005    | R Programming |     2019 | Suman publisher |
+| B006    | JAVASCRIPT    |     2019 | dilip publisher |
++---------+---------------+----------+-----------------+
+5 rows in set (0.00 sec)
+
+
+MariaDB [1CR17IS019]> create table book1(book_id varchar(10),title varchar(20),pub_year int,pub_name varchar(30), primary key(book_id,pub_year))partition by RANGE(pub_year)(partition p1 VALUES LESS THAN(1990),partition p2 VALUES LESS THAN(2000),partition p3 VALUES LESS THAN(2010), partition p4 VALUES LESS THAN maxvalue);
+Query OK, 0 rows affected (1.28 sec)
+
+
+MariaDB [1CR17IS019]> create table book1(book_id varchar(10),title varchar(20),pub_year int,pub_name varchar(30), primary key(book_id,pub_year))partition by RANGE(pub_year)(partition p1 VALUES LESS THAN(1990),partition p2 VALUES LESS THAN(2000),partition p3 VALUES LESS THAN(2010), partition p4 VALUES LESS THAN maxvalue);
+Query OK, 0 rows affected (1.28 sec)
+
+MariaDB [1CR17IS019]> select  * from book1 partition(p1);
+Empty set (0.00 sec)
+
+MariaDB [1CR17IS019]> select  * from book1 partition(p1);
++---------+-------+----------+----------+
+| book_id | title | pub_year | pub_name |
++---------+-------+----------+----------+
+|         | JAVA  |        0 | NULL     |
++---------+-------+----------+----------+
+1 row in set (0.00 sec)
+
+MariaDB [1CR17IS019]> select  * from book1 partition(p1);
++---------+-------+----------+----------+
+| book_id | title | pub_year | pub_name |
++---------+-------+----------+----------+
+|         | JAVA  |        0 | NULL     |
++---------+-------+----------+----------+
+1 row in set (0.00 sec)
+
+MariaDB [1CR17IS019]> select  * from book1 partition(p2);
++---------+---------------+----------+---------------+
+| book_id | title         | pub_year | pub_name      |
++---------+---------------+----------+---------------+
+| B001    | C#            |     1999 | CMR Publisher |
+| B005    | R Programming |     1990 | CMR Publisher |
++---------+---------------+----------+---------------+
+2 rows in set (0.00 sec)
+
+MariaDB [1CR17IS019]> select  * from book1 partition(p3);
+Empty set (0.00 sec)
+
+MariaDB [1CR17IS019]> select  * from book1 partition(p3);
+Empty set (0.00 sec)
+
+MariaDB [1CR17IS019]> select  * from book1 partition(p3);
+Empty set (0.00 sec)
+
+MariaDB [1CR17IS019]> select  * from book1 partition(p3);
++---------+-------+----------+-----------------+
+| book_id | title | pub_year | pub_name        |
++---------+-------+----------+-----------------+
+| B005    | C#    |     2009 | Dilip publisher |
++---------+-------+----------+-----------------+
+1 row in set (0.00 sec)
+

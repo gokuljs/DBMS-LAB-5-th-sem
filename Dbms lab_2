@@ -1,0 +1,150 @@
+->SELECT * FROM customer;
++-------------+---------------+---------------+-------+-------------+
+| customer_id | customer_name | customer_city | grade | salesman_id |
++-------------+---------------+---------------+-------+-------------+
+| C001        | Haripranav    | Bangalore     | 10    | S007        |
+| C002        | Guru          | Mumbai        | 8     | S007        |
+| C003        | Brinda        | Chennai       | 9     | S004        |
+| C004        | Deeksha       | Chennai       | 9     | S001        |
+| C005        | Aditya        | Bangalore     | 8     | S007        |
+| C006        | Bharath       | Bangalore     | 9     | S007        |
+| C007        | Eajaz         | Bangalore     | 5     | S002        |
+| C008        | Sharath       | Chennai       | 10    | S007        |
++-------------+---------------+---------------+-------+-------------+
+
+->SELECT * FROM salesman;
++-------------+------------+-----------+------------+
+| salesman_id | name       | city      | commission |
++-------------+------------+-----------+------------+
+| S001        | Rakesh.R   | Bangalore |          5 |
+| S002        | Haricharan | Mumbai    |          5 |
+| S003        | Kumar.V    | Chennai   |         10 |
+| S004        | Dilip.K    | Bangalore |          7 |
+| S005        | Likith.P   | Kolkatta  |          8 |
+| S006        | Ashwath.J  | Bangalore |          2 |
+| S007        | Disha.K    | Bangalore |         10 |
++-------------+------------+-----------+------------+
+
+->SELECT * FROM orders;
++----------+--------------+------------+-------------+-------------+
+| order_no | purchase_amt | order_date | customer_id | salesman_id |
++----------+--------------+------------+-------------+-------------+
+| OR01     |         7050 | 2019-08-19 | C003        | S007        |
+| OR02     |          700 | 2019-08-20 | C002        | S002        |
+| OR03     |          850 | 2019-08-20 | C007        | S004        |
+| OR04     |         1999 | 2019-08-21 | C003        | S007        |
+| OR05     |        39999 | 2019-09-01 | C004        | S004        |
+| OR07     |        50000 | 2019-09-01 | C006        | S002        |
+| OR08     |         7500 | 2019-09-02 | C006        | S007        |
++----------+--------------+------------+-------------+-------------+
+
+
+1) select avg(grade) from customer where customer_city='Bangalore'
+
+->SELECT count(*) as 'customer_count' from customer where grade>(select avg(grade) from customer where customer_city='Bangalore');
++----------------+
+| customer_count |
++----------------+
+|              5 |
++----------------+
+1 row in set (0.00 sec)
+
+->SELECT customer_name from customer where grade>(select avg(grade) from customer where customer_city='Bangalore');
++---------------+
+| customer_name |
++---------------+
+| Haripranav    |
+| Brinda        |
+| Deeksha       |
+| Bharath       |
+| Sharath       |
++---------------+
+
+2)
+->select salesman_id from customer group by(salesman_id) having count(*)>1;
++-------------+
+| salesman_id |
++-------------+
+| S007        |
++-------------+
+1 row in set (0.01 sec)
+
+
+->select salesman_id,name from salesman where salesman_id in(select salesman_id from customer group by(salesman_id) having count(*)>1);
++-------------+---------+
+| salesman_id | name    |
++-------------+---------+
+| S007        | Disha.K |
++-------------+---------+
+1 row in set (0.03 sec)
+
+						(OR)
+                                     
+->select c.salesman_id,name from salesman s,customer c where s.salesman_id=c.salesman_id group by(c.salesman_id) having count(*)>1;
++-------------+---------+
+| salesman_id | name    |
++-------------+---------+
+| S007        | Disha.K |
++-------------+---------+
+1 row in set (0.00 sec)
+
+						(OR)
+					
+-> select salesman_id,name from salesman s where exists(select count(*) from customer c where s.salesman_id=c.salesman_id group by(c.salesman_id) having count(*)>1);
++-------------+---------+
+| salesman_id | name    |
++-------------+---------+
+| S007        | Disha.K |
++-------------+---------+
+1 row in set (0.00 sec)
+
+3)
+
+-> (select name as "Salesman name",customer_name,"Same city" from salesman s,customer c where s.salesman_id=c.salesman_id and c.customer_city=s.city) union (select name as "Salesman name",customer_name,"Different city"  from salesman s,customer c where s.salesman_id=c.salesman_id and c.customer_city!=s.city);
++---------------+---------------+----------------+
+| Salesman name | customer_name | Same city      |
++---------------+---------------+----------------+
+| Disha.K       | Haripranav    | Same city      |
+| Disha.K       | Aditya        | Same city      |
+| Disha.K       | Bharath       | Same city      |
+| Disha.K       | Guru          | Different city |
+| Dilip.K       | Brinda        | Different city |
+| Rakesh.R      | Deeksha       | Different city |
+| Haricharan    | Eajaz         | Different city |
+| Disha.K       | Sharath       | Different city |
++---------------+---------------+----------------+
+8 rows in set (0.00 sec)
+
+						(OR)
+						
+> (select name as "Salesman name",customer_name,"Same city" as "Customer city" from salesman s,customer c where s.salesman_id=c.salesman_id and c.customer_city=s.city) union (select name as "Salesman name",customer_name,"Different city"  from salesman s,customer c where s.salesman_id=c.salesman_id and c.customer_city!=s.city) union (select salesman_id,name,"No customer" as "Customer city" from salesman where salesman_id not in(select salesman_id from salesman));
+
++---------------+---------------+----------------+
+| Salesman name | customer_name | Same city      |
++---------------+---------------+----------------+
+| Disha.K       | Haripranav    | Same city      |
+| Disha.K       | Aditya        | Same city      |
+| Disha.K       | Bharath       | Same city      |
+| Disha.K       | Guru          | Different city |
+| Dilip.K       | Brinda        | Different city |
+| Rakesh.R      | Deeksha       | Different city |
+| Haricharan    | Eajaz         | Different city |
+| Disha.K       | Sharath       | Different city |
++---------------+---------------+----------------+
+8 rows in set (0.00 sec)
+
+> create view highest_order as select o.order_no,order_date,s.salesman_id,s.name from salesman s,orders o where s.salesman_id=o.salesman_id and purchase_amt=(select max(purchase_amt) from orders o1 where o.order_date=o1.order_date);
+Query OK, 0 rows affected (0.04 sec)
+
+MariaDB [1CR17IS019]> select * from highest_order;
++----------+------------+-------------+------------+
+| order_no | order_date | salesman_id | name       |
++----------+------------+-------------+------------+
+| OR01     | 2019-08-19 | S007        | Disha.K    |
+| OR03     | 2019-08-20 | S004        | Dilip.K    |
+| OR04     | 2019-08-21 | S007        | Disha.K    |
+| OR07     | 2019-09-01 | S002        | Haricharan |
+| OR08     | 2019-09-02 | S007        | Disha.K    |
++----------+------------+-------------+------------+
+5 rows in set (0.03 sec)
+
